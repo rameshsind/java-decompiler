@@ -1,0 +1,8 @@
+# file name of the java bytecode instructions 
+javabytecodefile=D:/projects/JD/input/jvminstruction.xls
+
+# input java class name
+input_class_name=D:/projects/JavaDecompiler/src/HelloWorld.class
+
+#Bytecode information to file
+create_byte_code_file=true
