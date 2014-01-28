@@ -3,7 +3,7 @@ package javadecompiler.bytecode.decoder;
 
 public class DecodeHelper
 {
-    public static final String FORMATTED_SPACE = "  ";
+    public static final String FORMATTED_SPACE = "          ";
     
     public static String getAccessSpecifier( String accessHexaCode, boolean isMethod )
     {

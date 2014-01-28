@@ -26,7 +26,45 @@ public class JavaFileWriter
     {
         bytecodeToJavaConvertor = new BytecodeToJavaDecoder( byteCodeParser );
     }
+    
+    public void write( String inputFileName, StringBuilder javaOutput  )
+    {
 
+        String classString = bytecodeToJavaConvertor.getClassString();
+        String interfaceString = bytecodeToJavaConvertor.getAllInterfaceDetails();
+        String fieldsString = bytecodeToJavaConvertor.getAllFieldDetails();
+        String methodsString = bytecodeToJavaConvertor.getAllMethodDetails();
+
+            System.out.println( "\n\n\n\n\n\n\n" );
+            if ( !"".equals( bytecodeToJavaConvertor.packageAndClassName[0] ) )
+            {
+                System.out.println( "package " + bytecodeToJavaConvertor.packageAndClassName[0] + ";" );
+                javaOutput.append( "package " + bytecodeToJavaConvertor.packageAndClassName[0] + ";" );
+            }
+            
+            javaOutput.append(  bytecodeToJavaConvertor.getImportItems() );
+            javaOutput.append( NEWLINE );
+            System.out.println( bytecodeToJavaConvertor.getImportItems() );
+            javaOutput.append(  classString + interfaceString );
+            javaOutput.append( NEWLINE );
+            System.out.println( classString + interfaceString );
+            javaOutput.append(  OPEN_BRACE );
+            javaOutput.append( NEWLINE );
+            System.out.println( OPEN_BRACE );
+            javaOutput.append(  fieldsString );
+            javaOutput.append( NEWLINE );
+            System.out.println( fieldsString );
+            javaOutput.append( methodsString );
+            javaOutput.append( NEWLINE );
+            System.out.println( methodsString );
+            javaOutput.append( CLOSE_BRACE );
+            javaOutput.append( NEWLINE );
+            System.out.println( CLOSE_BRACE );
+            
+            
+        
+    }
+    
     public void write( String inputFileName )
     {
 
