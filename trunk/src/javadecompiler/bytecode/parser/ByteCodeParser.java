@@ -1,9 +1,7 @@
 package javadecompiler.bytecode.parser;
 
 import java.io.File;
-
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,9 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
-//import org.apache.commons.logging.Log;
-//import org.apache.commons.logging.LogFactory;
 
 import javadecompiler.bytecode.entities.ByteCodeInstraction;
 import javadecompiler.bytecode.entities.CodeLineNumber;
@@ -71,7 +66,6 @@ public class ByteCodeParser
     private Map< String, Opcode > opcodeInfoMap = new HashMap< String, Opcode >();
     private File file;
     private FileInputStream fin;
-    private FileWriter fw;
     
     private int exceptionsIndex = -1;
     private int codeIndex = -1;
@@ -79,8 +73,14 @@ public class ByteCodeParser
     private int localVarTableIndex = -1;
     private int constantValueIndex = -1;
     private int signatureIndex = -1;
+    StringBuilder byteCodeOutput = null;
 
-//    private static final Log log = LogFactory.getLog(ByteCodeParser.class);
+    public ByteCodeParser( StringBuilder taByteCode )
+    {
+      this.byteCodeOutput = taByteCode;
+    }
+
+    //    private static final Log log = LogFactory.getLog(ByteCodeParser.class);
     public void extractSuperClass() throws NumberFormatException, IOException
     {
         superClassIndex = Integer.parseInt( getHexa( 2 ), 16 );
@@ -707,11 +707,7 @@ public class ByteCodeParser
         if ( fin != null )
             fin.close();
         
-        if (fw != null )
-        {
-            fw.flush();
-            fw.close();
-        }
+        
     }
 
     public void extractMagicNo() throws IOException
@@ -722,21 +718,9 @@ public class ByteCodeParser
 
     public void logInfo( String string )
     {
-       
         System.out.println( string );
-        if (fw != null )
-        {
-            try
-            {
-                fw.write( string );
-                fw.write( "\n" );
-            }
-            catch ( IOException e )
-            {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
+        byteCodeOutput.append( string );
+        byteCodeOutput.append( "\n" );
     }
 
     public String getString( int length ) throws IOException
@@ -761,17 +745,14 @@ public class ByteCodeParser
         return result;
     }
 
-    public void intialize( String inputClassFileName, boolean createByteCodeFile, String byteCodeInstructionFile ) throws  DecompilerException
+    public void intialize( String inputClassFileName ) throws  DecompilerException
     {
         try
         {
             file = new File( inputClassFileName );
             fin = new FileInputStream( file );
-            JavaOpcodeLoader.loadJVMInsruction( opcodeInfoMap, byteCodeInstructionFile );
-            if( createByteCodeFile )
-            {
-              fw = new FileWriter( inputClassFileName + "bytecode.txt" );
-            }
+            JavaOpcodeLoader.loadJVMInsruction( opcodeInfoMap );
+           
         }
         catch ( IOException e )
         {

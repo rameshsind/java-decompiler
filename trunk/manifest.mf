@@ -1,0 +1,2 @@
+Main-Class: javadecompiler.gui.JavaDecompilerGUI
+Class-Path: lib/jxl.jar

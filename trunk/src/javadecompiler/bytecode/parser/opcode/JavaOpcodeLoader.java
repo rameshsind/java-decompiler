@@ -2,6 +2,9 @@ package javadecompiler.bytecode.parser.opcode;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Locale;
 import java.util.Map;
 
@@ -16,16 +19,16 @@ import jxl.read.biff.BiffException;
 public class JavaOpcodeLoader
 {
     
-    public static void loadJVMInsruction(Map< String, Opcode > opcodeInfoMap, String byteCodeInstructionFile) throws DecompilerException
+    public static void loadJVMInsruction(Map< String, Opcode > opcodeInfoMap) throws DecompilerException
     {
-        
+        InputStream inputFile = JavaOpcodeLoader.class.getResourceAsStream("/javadecompiler/bytecode/parser/opcode/jvminstruction.xls");
         WorkbookSettings ws = new WorkbookSettings();
         ws.setLocale( new Locale( "en", "EN" ) );
 
         Workbook workbook = null;
         try
         {
-            workbook = Workbook.getWorkbook( new File( byteCodeInstructionFile ), ws );
+            workbook = Workbook.getWorkbook( inputFile, ws );
         }
         catch ( BiffException e )
         {
