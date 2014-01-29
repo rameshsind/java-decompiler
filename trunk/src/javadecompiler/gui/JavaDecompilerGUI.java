@@ -12,13 +12,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import javadecompiler.JavaDecompiler;
-import javadecompiler.exception.DecompilerException;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JToolBar;
@@ -33,12 +33,11 @@ public class JavaDecompilerGUI extends JFrame implements ActionListener
     private JTextArea taJava;
     private JTextArea taByteCode;
     private JTextArea taCurrent;
-    private int count;
     private JMenuBar menuBar;
-    private JMenu fileM, editM, viewM;
+    private JMenu fileM, editM;
     private JScrollPane scpane;
     private JScrollPane scpaneByteCode;
-    private JMenuItem exitI, cutI, copyI, pasteI, selectI, saveI, openI, statusI;
+    private JMenuItem exitI, cutI, copyI, pasteI, selectI, saveI, openI;
     private String pad;
     private JToolBar toolBar;
     final JFileChooser fc;
@@ -57,15 +56,13 @@ public class JavaDecompilerGUI extends JFrame implements ActionListener
         pane.setLayout( new BorderLayout() );
 
         fc = new JFileChooser();
-        count = 0;
         pad = " ";
         taCurrent = taJava = new JTextArea(); //textarea
-        taByteCode = new JTextArea(); //textarea
-        //ta.setEditable( false );
+        taByteCode = new JTextArea();
+
         menuBar = new JMenuBar(); //menubar
         fileM = new JMenu( "File" ); //file menu
         editM = new JMenu( "Edit" ); //edit menu
-        viewM = new JMenu( "View" ); //edit menu
         scpane = new JScrollPane( taJava ); //scrollpane  and add textarea to scrollpane
         scpaneByteCode = new JScrollPane( taByteCode );
 
@@ -76,18 +73,11 @@ public class JavaDecompilerGUI extends JFrame implements ActionListener
         selectI = new JMenuItem( "Select All" ); //menuitems
         saveI = new JMenuItem( "Save As" ); //menuitems
         openI = new JMenuItem( "Open" ); //menuitems
-        statusI = new JMenuItem( "Status" ); //menuitems
         toolBar = new JToolBar();
-
-        taJava.setLineWrap( true );
-        taJava.setWrapStyleWord( true );
-        taByteCode.setLineWrap( true );
-        taByteCode.setWrapStyleWord( true );
 
         setJMenuBar( menuBar );
         menuBar.add( fileM );
         menuBar.add( editM );
-        //menuBar.add( viewM );
 
         fileM.add( openI );
         fileM.add( saveI );
@@ -97,8 +87,6 @@ public class JavaDecompilerGUI extends JFrame implements ActionListener
         editM.add( copyI );
         editM.add( pasteI );
         editM.add( selectI );
-
-        //viewM.add( statusI );
 
         saveI.setAccelerator( KeyStroke.getKeyStroke( KeyEvent.VK_S, ActionEvent.CTRL_MASK ) );
         openI.setAccelerator( KeyStroke.getKeyStroke( KeyEvent.VK_L, ActionEvent.CTRL_MASK ) );
@@ -159,7 +147,6 @@ public class JavaDecompilerGUI extends JFrame implements ActionListener
         copyI.addActionListener( this );
         pasteI.addActionListener( this );
         selectI.addActionListener( this );
-        //statusI.addActionListener( this );
 
         setVisible( true );
     }
@@ -176,27 +163,21 @@ public class JavaDecompilerGUI extends JFrame implements ActionListener
                 File file = fc.getSelectedFile();
                 inputFileName = file.getAbsolutePath();
                 JavaDecompiler jd = new JavaDecompiler();
+                taJava.setText( null );
+                taByteCode.setText( null );
+                StringBuilder[] output = { new StringBuilder(), new StringBuilder() };
                 try
                 {
-                    taJava.setText( null );
-                    taByteCode.setText( null );
-                    StringBuilder[] output = { new StringBuilder(), new StringBuilder() };
                     jd.decompile( inputFileName, output );
-                    taJava.append( output[1].toString() );
-                    taJava.setCaretPosition( 0 );
-                    taByteCode.append( output[0].toString() );
-                    taByteCode.setCaretPosition( 0 );
                 }
-                catch ( IOException e1 )
+                catch ( Throwable t )
                 {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
+                    JOptionPane.showMessageDialog( this, "Unable to decode the input class file" );
                 }
-                catch ( DecompilerException e1 )
-                {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                }
+                taJava.append( output[1].toString() );
+                taJava.setCaretPosition( 0 );
+                taByteCode.append( output[0].toString() );
+                taByteCode.setCaretPosition( 0 );
             }
             else
             {
@@ -254,10 +235,7 @@ public class JavaDecompilerGUI extends JFrame implements ActionListener
             taCurrent.insert( pad, taCurrent.getCaretPosition() );
         else if ( choice == selectI )
             taCurrent.selectAll();
-        else if ( e.getSource() == statusI )
-        {
-            //not yet implmented
-        }
+
     }
 
     public static void main( String[] args )
