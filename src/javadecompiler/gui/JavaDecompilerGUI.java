@@ -202,7 +202,7 @@ public class JavaDecompilerGUI extends JFrame implements ActionListener
                 }
                 catch ( IOException e1 )
                 {
-                    // TODO Auto-generated catch block
+                    JOptionPane.showMessageDialog( this, "Unable to save" );
                     e1.printStackTrace();
                 }
                 finally
