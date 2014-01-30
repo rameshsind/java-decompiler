@@ -8,7 +8,7 @@ Step1: Compile the required java file using javac -g <JavaFileName>
 Step2: Run build.bat from the command prompt.
 
 
-Step3: double click on the javadecompiler.jar
+Step3: Go to 'bin' folder and double click on javadecompiler.jar file 
 
 
 
