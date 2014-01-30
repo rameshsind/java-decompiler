@@ -2,6 +2,10 @@
 
 mkdir classes
 
+mkdir bin
+
+mkdir bin\lib
+
 cd src
 
 @echo "Setting classpath"
@@ -18,10 +22,11 @@ copy javadecompiler\bytecode\parser\opcode\jvminstruction.xls ..\classes\javadec
 
 cd ..
 
-copy -r lib classes\
+
+copy  lib\* bin\lib\
 
 
-jar -cvfm javadecompiler.jar manifest.mf  -C classes/ .
+jar cvfm bin\javadecompiler.jar manifest.mf  -C classes/ .
 
 
 
